@@ -1,0 +1,22 @@
+{
+	"name": "teewebapp/admin",
+	"description": "Admin Module for TeeWebApp",
+	"keywords": ["teewebapp", "admin"],
+	"license": "MIT",
+	"require": {
+		"laravel/framework": "4.2.*",
+		"creolab/laravel-modules": "dev-master",
+		"yaap/theme": "dev-master",
+		"lavary/laravel-menu": "dev-master",
+		"creitive/breadcrumbs": "dev-master",
+		"roumen/asset": "dev-master",
+		"pingpong/widget" : "1.0.*"
+	},
+	"autoload": {
+		"classmap": [
+			"commands",
+			"controllers"
+		]
+	},
+	"minimum-stability": "stable"
+}
