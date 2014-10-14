@@ -1,0 +1,5 @@
+{
+    "enabled": true,
+    "command": ["App\\Modules\\Admin\\Commands\\ChangePassword"],
+    "order": 10
+}
