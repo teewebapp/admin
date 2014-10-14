@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Modules\Admin\Controllers;
+namespace Tee\Admin\Controllers;
 
-use App\Modules\Admin\Controllers\AdminBaseController;
+use Tee\Admin\Controllers\AdminBaseController;
 
 use View, Redirect, Validator, Breadcrumbs, URL, Input;
 

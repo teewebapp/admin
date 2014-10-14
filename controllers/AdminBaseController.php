@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Modules\Admin\Controllers;
+namespace Tee\Admin\Controllers;
 
-use App\Modules\System\Controllers\BaseController;
+use Tee\System\Controllers\BaseController;
 use View, Theme, URL, Breadcrumbs, Menu;
 
 class AdminBaseController extends BaseController {

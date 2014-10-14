@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Admin\Controllers;
+namespace Tee\Admin\Controllers;
 
 use View, URL, Menu;
 

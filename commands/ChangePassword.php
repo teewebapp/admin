@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Modules\Admin\Commands;
+namespace Tee\Admin\Commands;
 
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 
-use App\Modules\User\Models\User;
+use Tee\User\Models\User;
 
 use Hash;
 

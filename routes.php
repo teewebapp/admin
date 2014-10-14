@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Admin;
+namespace Tee\Admin;
 use Route;
 
 Route::when('admin', 'auth');
