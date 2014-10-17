@@ -1,5 +1,5 @@
 {
     "enabled": true,
-    "command": ["App\\Modules\\Admin\\Commands\\ChangePassword"],
+    "command": ["Tee\\Admin\\Commands\\ChangePassword"],
     "order": 10
 }

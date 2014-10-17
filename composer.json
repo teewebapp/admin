@@ -14,8 +14,7 @@
 	},
 	"autoload": {
 		"classmap": [
-			"commands",
-			"controllers"
+			"."
 		]
 	},
 	"minimum-stability": "stable"
