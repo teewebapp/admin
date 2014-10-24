@@ -3,13 +3,16 @@
 namespace Tee\Admin\Controllers;
 
 use Tee\System\Controllers\BaseController;
-use View, Theme, URL, Breadcrumbs, Menu;
+use View, URL, Config;
+
+use Tee\System\Breadcrumbs;
+use Tee\System\Menu;
 
 class AdminBaseController extends BaseController {
 
     public function __construct() {
+        Config::set('site.theme', null);
         $this->makeMenu();
-        Theme::init('admin');
         View::share('pageTitle', '');
         Breadcrumbs::setCssClasses('breadcrumb');
         Breadcrumbs::setDivider('');

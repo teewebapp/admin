@@ -4,7 +4,9 @@ namespace Tee\Admin\Controllers;
 
 use Tee\Admin\Controllers\AdminBaseController;
 
-use View, Redirect, Validator, Breadcrumbs, URL, Input;
+use View, Redirect, Validator, URL, Input;
+
+use Tee\System\Breadcrumbs;
 
 class ResourceController extends AdminBaseController {
 

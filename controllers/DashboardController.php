@@ -2,7 +2,7 @@
 
 namespace Tee\Admin\Controllers;
 
-use View, URL, Menu;
+use View, URL;
 
 class DashboardController extends AdminBaseController {
 
