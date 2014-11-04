@@ -1,5 +1,6 @@
 {
     "enabled": true,
     "command": ["Tee\\Admin\\Commands\\ChangePassword"],
+    "provider": "Tee\\Admin\\ServiceProvider",
     "order": 10
 }
