@@ -10,7 +10,7 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"Tee\\Admin": "."
+			"Tee\\Admin\\": "."
 		}
 	},
 	"minimum-stability": "stable"
