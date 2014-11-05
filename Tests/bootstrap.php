@@ -1,3 +1,3 @@
 <?php
 
-require 'vendor/teewebapp/system/tests/bootstrap/bootstrap.php';
+require 'vendor/teewebapp/system/Tests/bootstrap/bootstrap.php';
