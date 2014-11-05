@@ -9,9 +9,9 @@
 		"teewebapp/user": "dev-master@dev"
 	},
 	"autoload": {
-		"classmap": [
-			"."
-		]
+		"psr-4": {
+			"Tee\\Admin": "."
+		}
 	},
 	"minimum-stability": "stable"
 }
