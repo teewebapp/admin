@@ -14,7 +14,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider {
             return Menu::make('dashboardMenu', function($menu) use($app) {
                 $format = '<img src="%s" class="fa" />&nbsp;&nbsp;<span>%s</span>';
                 $menu->add(sprintf($format, moduleAsset('admin', '/images/icon_home.png'), 'Visão Geral'), 'admin');
-                Event::fire('admin::loadMenu', array($menu));
+                Event::fire('admin::menu.load', array($menu));
             });
         });
     }
