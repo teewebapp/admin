@@ -96,14 +96,16 @@ class ResourceController extends AdminBaseController {
     public function store()
     {
         $modelClass = $this->modelClass;
-        $validator = $this->getValidator();
+
+        $model= new $modelClass;
+        $model->fill(Input::all());
+
+        $validator = $this->getValidator($model, 'create');
 
         if ($validator->fails()) {
             return Redirect::back()->withErrors($validator)->withInput();
         }
 
-        $model= new $modelClass;
-        $model->fill(Input::all());
         $this->beforeSave($model);
         $model->save();
 
@@ -140,23 +142,25 @@ class ResourceController extends AdminBaseController {
         $modelClass = $this->modelClass;
         $model = $modelClass::findOrFail($id);
 
-        $validator = $this->getValidator();
+        $model= $modelClass::find($id);
+        $model->fill(Input::all());
+
+        $validator = $this->getValidator($model, 'update');
 
         if ($validator->fails()) {
             return Redirect::back()->withErrors($validator)->withInput();
         }
 
-        $model= $modelClass::find($id);
-        $model->fill(Input::all());
         $this->beforeSave($model);
         $model->save();
 
         return Redirect::route("admin.{$this->resourceName}.index");
     }
 
-    public function getValidator() {
+    public function getValidator($model, $scope) {
         $modelClass = $this->modelClass;
-        $validator = Validator::make($data = Input::all(), $modelClass::$rules);
+        //$validator = Validator::make($data = Input::all(), $modelClass::$rules);
+        $validator = $model->getValidator(Input::all(), $scope);
         $validator->setAttributeNames($modelClass::getAttributeNames());
         return $validator;
     }

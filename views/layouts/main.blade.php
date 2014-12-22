@@ -225,13 +225,13 @@
             <!-- sidebar: style can be found in sidebar.less -->
             <section class="sidebar">
                 <!-- Sidebar user panel -->
-                @include('admin::partials/user_panel')
+                @include('admin::partials.user_panel')
 
                 <!-- search form -->
-                @include('admin::partials/search')
+                @include('admin::partials.search')
 
                 <!-- sidebar menu: : style can be found in sidebar.less -->
-                @include('admin::partials/column_left')
+                @include('admin::partials.column_left')
             </section>
             <!-- /.sidebar -->
         </aside>
@@ -245,6 +245,7 @@
             </section>
 
             <section class="content">
+                @include('admin::partials.messages')
                 @yield('content')
             </section>
         </aside><!-- /.right-side -->
