@@ -16,6 +16,8 @@ class ResourceController extends AdminBaseController {
     
     public $moduleName; // ex: 'page'; auto indentified
     public $controllerName; // auto identified
+    public $controllerNamespace = array();
+    public $columns = array();
 
     public function __construct() {
         parent::__construct();
@@ -29,10 +31,16 @@ class ResourceController extends AdminBaseController {
         $auxClass = explode('\\', $class);
         if(!$this->moduleName)
             $this->moduleName = strtolower($auxClass[1]);
-        if(!$this->controllerName)
-        {
+        if(!$this->controllerName) {
             $this->controllerName = strtolower($auxClass[count($auxClass)-1]);
             $this->controllerName = str_replace('controller', '', $this->controllerName);
+
+            for($i = count($auxClass) - 2; $i > 1; $i--) {
+                $v = $auxClass[$i];
+                if(stristr($v, 'controller'))
+                    break;
+                $this->controllerNamespace[] = strtolower($v);
+            }
         }
 
         View::share('pageTitle', $this->resourceTitle);
@@ -40,6 +48,7 @@ class ResourceController extends AdminBaseController {
         View::share('resourceName', $this->resourceName);
         View::share('moduleName', $this->moduleName);
         View::share('controllerName', $this->controllerName);
+        View::share('tableColumns', $this->columns);
 
         Breadcrumbs::addCrumb(
             str_plural($this->resourceTitle),
@@ -63,7 +72,8 @@ class ResourceController extends AdminBaseController {
         $modelClass = $this->modelClass;
         $models = $this->beforeList($modelClass::query())->get();
 
-        return View::make("{$this->moduleName}::{$this->controllerName}.index",
+        return View::make(
+            $this->getViewName('index'),
             compact('models') + array(
                 'modelClass' => $this->modelClass
             )
@@ -81,9 +91,10 @@ class ResourceController extends AdminBaseController {
         $model = new $modelClass;
         $model->fill(Input::all());
         return View::make(
-            "{$this->moduleName}::{$this->controllerName}.create",
+            $this->getViewName('create'),
             compact('model') + array(
-                'pageTitle' => 'Cadastrar '.$this->resourceTitle
+                'pageTitle' => 'Cadastrar '.$this->resourceTitle,
+                'formView' => $this->getViewName('_form'),
             )
         );
     }
@@ -124,9 +135,10 @@ class ResourceController extends AdminBaseController {
         $model = $modelClass::find($id);
 
         return View::make(
-            "{$this->moduleName}::{$this->controllerName}.edit",
+            $this->getViewName('edit'),
             compact('model')  + array(
-                'pageTitle' => 'Editar '.$this->resourceTitle
+                'pageTitle' => 'Editar '.$this->resourceTitle,
+                'formView' => $this->getViewName('_form'),
             )
         );
     }
@@ -177,6 +189,17 @@ class ResourceController extends AdminBaseController {
         $modelClass::destroy($id);
 
         return Redirect::route("admin.{$this->resourceName}.index");
+    }
+
+    public function getViewName($name) {
+        $targetName = "{$this->moduleName}::";
+        $aux = $this->controllerNamespace;
+        $aux[] = $this->controllerName;
+        $targetName .= implode('.', $aux);
+        $targetName .= ".$name";
+        if(View::exists($targetName))
+            return $targetName;
+        return "admin::resource.$name";
     }
 
 }
