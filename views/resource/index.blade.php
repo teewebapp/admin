@@ -44,7 +44,7 @@
             @else
                 <tr>
                     <td colspan="4">
-                        Nenhuma item cadastrado
+                        Nenhum resultado encontrado
                     </td>
                 </tr>
             @endif
@@ -52,7 +52,7 @@
     </table>
 
     <a class="btn btn-primary" href="{{ route("admin.$resourceName.create") }}">
-        Adicionar Item
+        Adicionar
     </a>
 
     @if($orderable)
