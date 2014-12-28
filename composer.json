@@ -4,9 +4,9 @@
 	"keywords": ["teewebapp", "admin"],
 	"license": "MIT",
 	"require": {
-		"teewebapp/system": "dev-master@dev",
-		"teewebapp/auth": "dev-master@dev",
-		"teewebapp/user": "dev-master@dev"
+		"teewebapp/system": "1.*",
+		"teewebapp/auth": "1.*",
+		"teewebapp/user": "1.*"
 	},
 	"autoload": {
 		"psr-4": {
