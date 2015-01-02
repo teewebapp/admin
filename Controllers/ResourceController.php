@@ -8,6 +8,9 @@ use View, Redirect, Validator, URL, Input;
 
 use Tee\System\Breadcrumbs;
 
+/**
+ * TODO: usar traits ao invés de herança
+ */
 class ResourceController extends AdminBaseController {
 
     public $resourceTitle; // ex: Página

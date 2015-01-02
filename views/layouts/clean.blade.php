@@ -30,7 +30,10 @@
         <![endif]-->
 
         <!-- jQuery 1.10.0 -->
+        <!--
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.0/jquery.min.js"></script>
+        -->
+        <script src="{{ moduleAsset('admin', 'js/jquery.min.js') }}"></script>
         <script src="{{ moduleAsset('admin', 'js/knockout-3.2.0.js') }}"></script>
     </head>
     <body class="skin-blue">
