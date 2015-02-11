@@ -13,6 +13,8 @@ class AdminBaseController extends BaseController {
         Config::set('site.theme', null);
         $this->makeMenu();
         View::share('pageTitle', '');
+
+        Breadcrumbs::removeAll();
         Breadcrumbs::setCssClasses('breadcrumb');
         Breadcrumbs::setDivider('');
         Breadcrumbs::addCrumb('Visão Geral', URL::to('admin'));
