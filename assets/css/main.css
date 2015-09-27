@@ -4,6 +4,17 @@ label.required::after {
   font-weight: bold;
 }
 
+.sidebar-menu a i.fa {
+  color:black;
+  font-size: 19px;
+  position: relative;
+}
+
+.sidebar-menu a i.fa:before {
+  position: relative;
+  top:3px;
+}
+
 .form-signin {
   margin-left:auto;
   margin-right:auto;

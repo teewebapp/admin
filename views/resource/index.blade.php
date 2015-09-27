@@ -36,8 +36,8 @@
                         @endforeach
 
                         <td>
-                            {{ HTML::updateButton('Editar', route("admin.$resourceName.edit", $model->id)) }}
-                            {{ HTML::deleteButton('Remover', route("admin.$resourceName.destroy", $model->id)) }}
+                            {{ HTML::updateButton('Editar', route("$routePrefix.edit", $model->id)) }}
+                            {{ HTML::deleteButton('Remover', route("$routePrefix.destroy", $model->id)) }}
                         </td>
                     </tr>
                 @endforeach
@@ -51,7 +51,7 @@
         </tbody>
     </table>
 
-    <a class="btn btn-primary" href="{{ route("admin.$resourceName.create") }}">
+    <a class="btn btn-primary" href="{{ route("$routePrefix.create") }}">
         Adicionar
     </a>
 
@@ -62,7 +62,7 @@
                     itens: 'tbody tr',
                     up: '.glyphicon-chevron-up',
                     down: '.glyphicon-chevron-down',
-                    url: '{{ route("admin.$resourceName.order") }}'
+                    url: '{{ route("$routePrefix.order") }}'
                 });
             });
         </script>

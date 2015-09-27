@@ -4,7 +4,7 @@ namespace Tee\Admin\Controllers;
 
 use Tee\Admin\Controllers\AdminBaseController;
 
-use View, Redirect, Validator, URL, Input;
+use View, Redirect, Validator, URL, Input, Route;
 
 use Tee\System\Breadcrumbs;
 
@@ -15,17 +15,32 @@ class ResourceController extends AdminBaseController {
 
     public $resourceTitle; // ex: Página
     public $resourceName; // ex: 'page';
+    public $parentResourceName; // ex: 'page_category'
     public $modelClass; // ex: 'Page';
     
     public $moduleName; // ex: 'page'; auto indentified
     public $controllerName; // auto identified
+    public $controllerRealName; // auto identified
     public $controllerNamespace = array();
     public $orderable = false;
+    public $routePrefix = '';
 
     public function getColumns() {
         return [];
     }
 
+    /**
+     * Return parameters to all routes
+     * @return array
+     */
+    public function getDefaultRouteParameters() {
+        $result = [];
+        $currentRoute = Route::current();
+        if($this->parentResourceName && $currentRoute->parameter($this->parentResourceName)) {
+            $result[$this->parentResourceName] = $currentRoute->parameter($this->parentResourceName);
+        }
+        return $result;
+    }
 
     public function __construct() {
         parent::__construct();
@@ -39,9 +54,10 @@ class ResourceController extends AdminBaseController {
         $auxClass = explode('\\', $class);
         if(!$this->moduleName)
             $this->moduleName = strtolower($auxClass[1]);
-        if(!$this->controllerName) {
-            $this->controllerName = strtolower($auxClass[count($auxClass)-1]);
-            $this->controllerName = str_replace('controller', '', $this->controllerName);
+        if(!$this->controllerRealName) {
+            $this->controllerRealName = $auxClass[count($auxClass)-1];
+            $this->controllerRealName = str_replace('Controller', '', $this->controllerRealName);
+            $this->controllerName = strtolower($this->controllerRealName);
 
             for($i = count($auxClass) - 2; $i > 1; $i--) {
                 $v = $auxClass[$i];
@@ -51,17 +67,25 @@ class ResourceController extends AdminBaseController {
             }
         }
 
+        if($this->parentResourceName)
+            $this->routePrefix = "admin.{$this->parentResourceName}.{$this->resourceName}";
+        else
+            $this->routePrefix = "admin.{$this->resourceName}";
+
+
         View::share('pageTitle', str_plural($this->resourceTitle));
         View::share('resourceTitle', $this->resourceTitle);
         View::share('resourceName', $this->resourceName);
+        View::share('routePrefix', $this->routePrefix);
         View::share('moduleName', $this->moduleName);
         View::share('controllerName', $this->controllerName);
+        View::share('controllerRealName', $this->controllerRealName);
         View::share('tableColumns', $this->getColumns());
         View::share('orderable', $this->orderable);
 
         Breadcrumbs::addCrumb(
             str_plural($this->resourceTitle),
-            URL::route("admin.{$this->resourceName}.index")
+            URL::route($this->routePrefix . ".index", $this->getDefaultRouteParameters())
         );
     }
 
@@ -134,7 +158,7 @@ class ResourceController extends AdminBaseController {
         $this->beforeSave($model);
         $model->save();
 
-        return Redirect::route("admin.{$this->resourceName}.index");
+        return Redirect::route($this->routePrefix . ".index", $this->getDefaultRouteParameters());
     }
 
     /**
@@ -143,10 +167,9 @@ class ResourceController extends AdminBaseController {
      * @param  int  $id
      * @return Response
      */
-    public function edit($id)
+    public function edit()
     {
-        $modelClass = $this->modelClass;
-        $model = $modelClass::find($id);
+        $model = $this->getRequestedModel();
 
         $view = View::make(
             $this->getViewName('edit'),
@@ -168,10 +191,8 @@ class ResourceController extends AdminBaseController {
      */
     public function update($id)
     {
-        $modelClass = $this->modelClass;
-        $model = $modelClass::findOrFail($id);
+        $model = $this->getRequestedModel();
 
-        $model= $modelClass::find($id);
         $model->fill(Input::all());
 
         $validator = $this->getValidator($model, 'update');
@@ -183,7 +204,7 @@ class ResourceController extends AdminBaseController {
         $this->beforeSave($model);
         $model->save();
 
-        return Redirect::route("admin.{$this->resourceName}.index");
+        return Redirect::route($this->routePrefix . ".index", $this->getDefaultRouteParameters());
     }
 
     public function getValidator($model, $scope) {
@@ -200,12 +221,12 @@ class ResourceController extends AdminBaseController {
      * @param  int  $id
      * @return Response
      */
-    public function destroy($id)
+    public function destroy()
     {
-        $modelClass = $this->modelClass;
-        $modelClass::destroy($id);
+        $model = $this->getRequestedModel();
+        $model->delete();
 
-        return Redirect::route("admin.{$this->resourceName}.index");
+        return Redirect::route($this->routePrefix . ".index", $this->getDefaultRouteParameters());
     }
 
     public function getViewName($name) {
@@ -216,6 +237,15 @@ class ResourceController extends AdminBaseController {
         $targetName .= ".$name";
         if(View::exists($targetName))
             return $targetName;
+
+        $targetName = "{$this->moduleName}::";
+        $aux = $this->controllerNamespace;
+        $aux[] = snake_case($this->controllerRealName);
+        $targetName .= implode('.', $aux);
+        $targetName .= ".$name";
+        if(View::exists($targetName))
+            return $targetName;
+
         return "admin::resource.$name";
     }
 
@@ -227,6 +257,20 @@ class ResourceController extends AdminBaseController {
     public function beforeRenderForm($view, $model)
     {
         return $view;
+    }
+
+    /**
+     * Get requested model
+     * @return Model
+     */
+    public function getRequestedModel() {
+        $id = Route::current()->parameter('id');
+        if(!$id)
+            $id = Route::current()->parameter($this->resourceName);
+
+        $modelClass = $this->modelClass;
+        $model = $modelClass::findOrFail($id);
+        return $model;
     }
 
 }
